@@ -21,7 +21,7 @@ jobs:
       continue-on-error: true
 
     - name: Generating HTML from my AsyncAPI document with custom template
-      uses: Shurtu-gal/github-action-for-cli@98772031a51e94081aa3eee5d54100f4a720e7f2 #always use latest tag as each is pushed to docker
+      uses: Shurtu-gal/github-action-for-cli@4983c73c8433b45e99d8e9f622cd1ed8a9e0b5a8 #always use latest tag as each is pushed to docker
       with:
         template: '@asyncapi/html-template@0.15.4'  #In case of template from npm, because of @ it must be in quotes
         filepath: docs/api/my-asyncapi.yml
