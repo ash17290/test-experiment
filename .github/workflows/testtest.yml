@@ -1,0 +1,20 @@
+name: Test
+
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  test:
+    name: Testing Testing Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: experiment
+        uses: ./.github/actions/slackify-markdown
+        id: dupa
+        with:
+          markdown: "[${{github.event.issue.title}}](${{github.event.comment.html_url}}) \n ${{github.event.comment.body}}"
+      - name: get output from new
+        run: echo "${{ steps.dupa.outputs.text }}" 

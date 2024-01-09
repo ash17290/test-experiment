@@ -1,0 +1,41 @@
+name: AsyncAPI documents processing
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    #"standard step" where repo needs to be checked-out first
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: validate
+      uses: Shurtu-gal/github-action-for-generator@80f9bd9de36678201c4799ccfeffc0b0cdf6e69a
+      with:
+        command: validate
+    #In case all defaults are fine for you, just add such step
+    - name: Generating Markdown from my AsyncAPI document
+      uses: Shurtu-gal/github-action-for-generator@80f9bd9de36678201c4799ccfeffc0b0cdf6e69a
+      #uses: docker://asyncapi/github-action-for-generator:2.1.12
+      
+    #In case you do not want to use defaults, you for example want to use different template
+    - name: Generating HTML from my AsyncAPI document
+      uses: Shurtu-gal/github-action-for-generator@80f9bd9de36678201c4799ccfeffc0b0cdf6e69a
+      with:
+        template: '@asyncapi/html-template@0.15.4'
+        filepath: docs/api/my-asyncapi.yml
+        parameters: --force-write -p pdf=true baseHref=/test-experiment/ sidebarOrganization=byTags
+        output: generated-html
+
+    - name: Checking if stuff are available outside container
+      run: echo "===" && ls && echo "===" && ls generated-html && echo "==="
+      
+    #Using another action that takes generated HTML and pushes it to GH Pages
+    - name: Deploy GH page
+      uses: JamesIves/github-pages-deploy-action@3.4.2
+      with:
+        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: generated-html
