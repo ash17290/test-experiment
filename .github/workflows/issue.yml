@@ -16,16 +16,18 @@ jobs:
       with:
         template: '@asyncapi/html-template@0.15.4'  #In case of template from npm, because of @ it must be in quotes
         filepath: docs/api/my-asyncapi.yml
-        parameters: -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
+        parameters: --force-write -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
         output: generated-html
+      continue-on-error: true
 
     - name: Generating HTML from my AsyncAPI document with custom template
       uses: asyncapi/github-action-for-cli@e050f87a210f4569626232c6399b22d9b38d3367 #always use latest tag as each is pushed to docker
       with:
         template: '@asyncapi/html-template@0.15.4'  #In case of template from npm, because of @ it must be in quotes
         filepath: docs/api/my-asyncapi.yml
-        parameters: -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
+        parameters: --force-write -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
         output: generated-html
+      continue-on-error: true
       
     #In case you do not want to use defaults, you for example want to use different template
     - name: Generating HTML from my AsyncAPI document
@@ -33,7 +35,7 @@ jobs:
       with:
         template: '@asyncapi/html-template@0.15.4'  #In case of template from npm, because of @ it must be in quotes
         filepath: docs/api/my-asyncapi.yml
-        parameters: -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
+        parameters: --force-write -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
         output: generated-html
         
     #Using another action that takes generated HTML and pushes it to GH Pages
