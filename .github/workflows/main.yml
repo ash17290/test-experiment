@@ -1,30 +1,29 @@
-name: AsyncAPI documents processing
+name: GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: write
 
 jobs:
   generate:
-    runs-on: ubuntu-latest
+    runs-on: ["ubuntu-latest"]
     steps:
-    #"standard step" where repo needs to be checked-out first
-    - name: Checkout repo
-      uses: actions/checkout@v2
-      
-    #In case you do not want to use defaults, you for example want to use different template
-    - name: Generating HTML from my AsyncAPI document
-      uses: asyncapi/github-action-for-cli@v3.1.1 # You can use any version you want
-      with:
-        template: '@asyncapi/html-template@1.0.0'  #In case of template from npm, because of @ it must be in quotes
-        filepath: docs/api/my-asyncapi.yml
-        parameters: -p baseHref=/test-experiment/ sidebarOrganization=byTags #space separated list of key/values
-        output: generated-html
-      
-    #Using another action that takes generated HTML and pushes it to GH Pages
-    - name: Deploy GH page
-      uses: JamesIves/github-pages-deploy-action@4.0.0
-      with:
-        folder: generated-html
-        branch: gh-pages
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: generate
+        uses: asyncapi/github-action-for-cli@v3.1.2
+        with:
+          cli_version: v2.12.1
+          template: "@asyncapi/html-template@3.1.0"
+          filepath: docs/api/my-asyncapi.yml
+          parameters: --use-new-generator
+          output: out
+
+      - name: deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: out
